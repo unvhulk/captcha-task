@@ -37,7 +37,7 @@ const CaptchaInput = styled.input`
 	}
 `;
 
-function Captcha() {
+function Captcha({ onChange }) {
 	const [captcha, setCaptcha] = useState(generateCaptcha());
 	const [input, setInput] = useState("");
 
@@ -53,6 +53,7 @@ function Captcha() {
 
 	function handleCaptchaChange(event) {
 		setInput(event.target.value);
+		if (event.target.value === captcha) onChange(true);
 	}
 
 	return (

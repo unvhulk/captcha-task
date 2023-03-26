@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Captcha from "./Captcha";
+import { CiDark } from "react-icons/ci";
 
 const Container = styled.div`
 	display: flex;
@@ -9,6 +10,11 @@ const Container = styled.div`
 	padding: 20px;
 	background-color: ${(props) => props.theme.colors.background};
 	color: ${(props) => props.theme.colors.foreground};
+`;
+
+const Header = styled.header`
+	display: flex;
+	align-items: center;
 `;
 
 const SignupForm = styled.form`
@@ -45,13 +51,14 @@ const SubmitButton = styled.button`
 	font-size: 16px;
 	cursor: pointer;
 `;
-function Signup({ onSubmit }) {
+function Signup({ onSubmit, toggleTheme }) {
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
 		password: "",
 		confirmPassword: "",
 	});
+	const [captchaValue, setCaptchaValue] = useState(false);
 
 	function handleInputChange(event) {
 		const { name, value } = event.target;
@@ -64,10 +71,11 @@ function Signup({ onSubmit }) {
 
 	function handleSubmit(event) {
 		event.preventDefault();
-		if (formData.confirmPassword === formData.password) onSubmit(formData);
-		else alert("Passwords do not match !!");
+		if (captchaValue) {
+			if (formData.confirmPassword === formData.password) onSubmit(formData);
+			else alert("Passwords do not match !!");
+		} else alert("Captcha entered wrong!!!");
 	}
-	const [captchaValue, setCaptchaValue] = useState("");
 
 	function handleCaptchaChange(value) {
 		setCaptchaValue(value);
@@ -75,7 +83,13 @@ function Signup({ onSubmit }) {
 
 	return (
 		<Container>
-			<h2>Sign Up</h2>
+			<Header>
+				<h2>Sign Up</h2>
+				<CiDark
+					style={{ fontSize: "1.5rem", marginLeft: "1rem" }}
+					onClick={() => toggleTheme()}
+				/>
+			</Header>
 			<SignupForm onSubmit={handleSubmit}>
 				<FormInput
 					type='text'
